@@ -3,7 +3,6 @@ This is a simple game in which the user navigates through a maze
 The maze (for now) is static and will remain constant every time the game is launched
 There are no enemies in the maze! Simply navigate your way through to find the exit
 """
-import numpy as np
 
 import maze
 
@@ -18,6 +17,10 @@ def print_header():
 
 
 def initialize():
+    """
+    Creates the maze_layout list of rooms and the player oobject
+    :return: maze_layout, player
+    """
     # create all possible rooms
     rooms = [maze.Room([0, 0, 0, 0], 'small'),  # Closed room(0)
              maze.Room([1, 1, 1, 1], 'small'),  # Open room(1)
@@ -65,9 +68,8 @@ def game_loop(maze_layout, player):
     :return: UI output
     """
     while True:
-        print(player.x_location, player.y_location)
 
-        cmd = input('Do you wish to [M]ove, [L]ook around, or E[x]it? ')
+        cmd = input('Do you wish to [M]ove, [L]ook around, [C]heck map, or E[x]it? ')
         if not cmd:
             print("No input detected, please re-enter a command\n")
             continue
@@ -116,6 +118,10 @@ def game_loop(maze_layout, player):
         elif cmd == 'x':
             print('Thanks for playing!')
             break
+
+        elif cmd == 'c':
+            player.check_map()
+            print()
 
         else:
             print(f"I'm sorry, {cmd} was not recognized. Please re-enter a command.\n")

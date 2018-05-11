@@ -7,27 +7,17 @@ class Room:
         openings = []
         if self.doors[0]:
             openings.append('North')
+
         if self.doors[1]:
             openings.append('East')
+
         if self.doors[2]:
             openings.append('South')
+
         if self.doors[3]:
             openings.append('West')
         openings = ', '.join(openings[:-2] + [', and '.join(openings[-2:])])
         return f'The {self.size} room has {openings} doors.'
-
-    def __repr__(self):
-        openings = []
-        if self.doors[0]:
-            openings.append('North')
-        if self.doors[1]:
-            openings.append('East')
-        if self.doors[2]:
-            openings.append('South')
-        if self.doors[3]:
-            openings.append('West')
-        openings = ', '.join(openings[:-2] + [', and '.join(openings[-2:])])
-        return f'{self.size} room - {openings}' if openings else f'empty room'
 
 
 class Player:
@@ -51,20 +41,23 @@ class Player:
         if direction == 'n' and room.doors[0]:  # North attempt
             self.y_location -= 1
             return 1
+
         elif direction == 'e' and room.doors[1]:  # East attempt
             self.x_location += 1
             return 1
+
         elif direction == 's' and room.doors[2]:  # South attempt
             self.y_location += 1
             return 1
+
         elif direction == 'w' and room.doors[3]:  # West attempt
             self.x_location -= 1
             return 1
+
         else:
             compass = 'north' if direction == 'n' else \
                 'east' if direction == 'e' else \
                 'south' if direction == 's' else 'west'
-
             print(f'{self.name} walks into a wall when attempting to move {compass}\n')
             return 0
 
@@ -76,3 +69,11 @@ class Player:
         """
         print(f'{self.name} looks around the room...')
         print(room)
+
+    def check_map(self):
+        """
+        checks maps to see current location
+        :return: UI output
+        """
+        print(f'{self.name} checks their map...')
+        print(f'Your current coordinates are ({self.x_location}, {self.y_location})')
