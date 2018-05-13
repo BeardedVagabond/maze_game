@@ -24,7 +24,7 @@ def print_header():
 def initialize():
     """
     Creates the maze_layout list of rooms and the player object
-    :return: maze_layout, player
+    :return: maze_choice, maze_layout, player
     """
 
     # create all possible rooms
@@ -96,10 +96,13 @@ def index_to_rooms(maze_x, rooms):
     i = 0
     for x in maze_x:
         j = 0
+
         for y in x:
             maze_x[i][j] = rooms[y]
             j += 1
+
         i += 1
+
     return maze_x
 
 
@@ -107,6 +110,7 @@ def game_loop(maze_choice, maze_layout, player):
     """
     Runs the main game loop
     Reads command input from the player and responds accordingly
+    :param maze_choice: int index of which maze was chosen
     :param maze_layout: list describing the layout of the maze rooms
     :param player: Player object with inputted name
     :return: UI output
@@ -145,14 +149,17 @@ def game_loop(maze_choice, maze_layout, player):
                     move = player.move(direction, maze_layout)
                     if move:
                         print(f'{player.name} moves east into the next room\n')
+
                 elif direction == 's':
                     move = player.move(direction, maze_layout)
                     if move:
                         print(f'{player.name} moves south into the next room\n')
+
                 elif direction == 'w':
                     move = player.move(direction, maze_layout)
                     if move:
                         print(f'{player.name} moves west into the next room\n')
+
                 else:
                     print(f"Sorry, the command {direction} was not recognized. Please re-enter a command.\n")
 
@@ -174,6 +181,7 @@ def game_loop(maze_choice, maze_layout, player):
         # Set and check end of maze condition
         x_finish = 6 if maze_choice == 0 else 7 if maze_choice == 1 else 0
         y_finish = 6 if maze_choice == 0 else 0 if maze_choice == 1 else 1
+
         if player.x_location == x_finish and player.y_location == y_finish:
             print(f'{player.name} has made it to the end of the maze! Congratulations!!')
             print("'Thanks for playing!")

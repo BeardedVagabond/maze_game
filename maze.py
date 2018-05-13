@@ -17,6 +17,7 @@ class Room:
         if self.doors[3]:
             openings.append('West')
         openings = ', '.join(openings[:-2] + [', and '.join(openings[-2:])])
+
         return f'The {self.size} room has {openings} doors.' if openings else f'Empty room!'
 
 
@@ -75,6 +76,7 @@ class Player:
     def check_map(self, maze_choice):
         """
         checks maps to see current location
+        :param maze_choice: index of room chosen
         :return: UI output
         """
 
