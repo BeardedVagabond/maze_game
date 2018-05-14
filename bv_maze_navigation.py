@@ -129,39 +129,7 @@ def game_loop(maze_choice, maze_layout, player):
             move = 0
 
             while not move:
-                print('Where would you like to move?')
-
-                direction = ''
-                while not direction:
-                    direction = input('[N]orth, [E]ast, [S]outh, [W]est: ')
-
-                    if not direction:
-                        print("No input detected, please re-enter a direction\n")
-                        continue
-
-                direction = direction.lower().strip()
-
-                if direction == 'n':
-                    move = player.move(direction, maze_layout)
-                    if move:
-                        print(f'{player.name} moves north into the next room\n')
-                elif direction == 'e':
-                    move = player.move(direction, maze_layout)
-                    if move:
-                        print(f'{player.name} moves east into the next room\n')
-
-                elif direction == 's':
-                    move = player.move(direction, maze_layout)
-                    if move:
-                        print(f'{player.name} moves south into the next room\n')
-
-                elif direction == 'w':
-                    move = player.move(direction, maze_layout)
-                    if move:
-                        print(f'{player.name} moves west into the next room\n')
-
-                else:
-                    print(f"Sorry, the command {direction} was not recognized. Please re-enter a command.\n")
+                move = move_loop(maze_layout, move, player)
 
         elif cmd == 'l':
             player.look(maze_layout[player.y_location][player.x_location])
@@ -186,6 +154,45 @@ def game_loop(maze_choice, maze_layout, player):
             print(f'{player.name} has made it to the end of the maze! Congratulations!!')
             print("'Thanks for playing!")
             break
+
+
+def move_loop(maze_layout, move, player):
+    print('Where would you like to move?')
+
+    direction = ''
+    while not direction:
+        direction = input('[N]orth, [E]ast, [S]outh, [W]est: ')
+
+        if not direction:
+            print("No input detected, please re-enter a direction\n")
+            continue
+
+    direction = direction.lower().strip()
+
+    if direction == 'n':
+        move = player.move(direction, maze_layout)
+        if move:
+            print(f'{player.name} moves north into the next room\n')
+
+    elif direction == 'e':
+        move = player.move(direction, maze_layout)
+        if move:
+            print(f'{player.name} moves east into the next room\n')
+
+    elif direction == 's':
+        move = player.move(direction, maze_layout)
+        if move:
+            print(f'{player.name} moves south into the next room\n')
+
+    elif direction == 'w':
+        move = player.move(direction, maze_layout)
+        if move:
+            print(f'{player.name} moves west into the next room\n')
+
+    else:
+        print(f"Sorry, the command {direction} was not recognized. Please re-enter a command.\n")
+
+    return move
 
 
 def main():
