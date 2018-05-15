@@ -5,6 +5,7 @@ I've never made a maze before... so the relative difficult is pretty random
 First maze has a couple loops
 Second maze is the largest and has no loops
 Third maze is the smallest and has no loops
+Fourth maze is generated using the function random_maze (loops possible, quality not ensured)
 There are no enemies in the maze! Simply navigate your way through to find the exit
 """
 import random
@@ -76,7 +77,7 @@ def initialize():
     maze_4 = random_maze(10)
 
     # create list of mazes, choose random maze for game, convert maze indexes to rooms
-    mazes = [maze_1, maze_2, maze_3]
+    mazes = [maze_1, maze_2, maze_3, maze_4]
     maze_choice = random.choice(range(0, 3))
     maze_layout = mazes[maze_choice]
     maze_layout = index_to_rooms(maze_layout, rooms)
@@ -120,16 +121,14 @@ def random_maze(size):
     new_maze[1][1] = 13
 
     # Loop through by row ensuring room connections
-    i = 0
-    j = 0
     for i in range(1, size - 1):
 
         for j in range(0, size - 2):
             # Determine if a connection is needed to adjacent rooms
             left_door = 1 if new_maze[i][j] in east else 0
-            right_door = 1 if new_maze[i][j + 1] in west else 0
             top_door = 1 if new_maze[i - 1][j + 1] in south else 0
-            bottom_door = 1 if new_maze[i + 1][j + 1] in north else 0
+            # bottom_door = 1 if new_maze[i + 1][j + 1] in north else 0
+            # right_door = 1 if new_maze[i][j + 1] in west else 0
 
             if i < size - 2:  # for all rows above bottom row of actual maze
 
