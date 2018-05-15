@@ -73,7 +73,7 @@ def initialize():
               [5, 4, 5, 3, 3, 8, 4],
               ]
 
-    maze_4 = random_maze(rooms, 10)
+    maze_4 = random_maze(10)
 
     # create list of mazes, choose random maze for game, convert maze indexes to rooms
     mazes = [maze_1, maze_2, maze_3]
@@ -95,14 +95,13 @@ def initialize():
     return maze_choice, maze_layout, player
 
 
-def random_maze(rooms, size):
+def random_maze(size):
     """
     Creates a random square maze of dimension = size
-    :param rooms: List of possible rooms
     :param size: Square dimension of desired maze
     :return: A list describing a random maze using index format
     """
-
+    # todo: try with only corridor and corner rooms
     # Pad maze with 0 with zero index perimeter
     size += 2
     new_maze = np.empty((size, size))
