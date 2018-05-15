@@ -5,7 +5,7 @@ I've never made a maze before... so the relative difficult is pretty random
 First maze has a couple loops
 Second maze is the largest and has no loops
 Third maze is the smallest and has no loops
-Fourth maze is generated using the function random_maze (loops possible, quality not ensured)
+Fourth maze is generated using the function random_maze and is not in game yet (loops are possible, quality not ensured)
 There are no enemies in the maze! Simply navigate your way through to find the exit
 """
 import random
@@ -13,7 +13,6 @@ import numpy as np
 
 import maze
 
-# todo: need a way to visualize mazes other than transcribing by hand...
 
 def print_header():
     print('=============================================')
@@ -54,7 +53,7 @@ def initialize():
               [13, 3, 4, 5, 11, 0, 0],
               [6, 7, 6, 3, 8, 7, 0],
               [2, 5, 1, 3, 15, 2, 0],
-              [5, 3, 12, 7, 6, 4, 0],
+              [5, 3, 8, 7, 6, 4, 0],
               [0, 0, 0, 5, 11, 0, 0],
               [0, 0, 0, 0, 5, 3, 15],
               ]
@@ -76,10 +75,12 @@ def initialize():
               ]
 
     maze_4 = random_maze(10)
+    print('Layout for unused random maze (for demonstration/inspection):')
+    vizualize_maze(maze_4)
 
     # create list of mazes, choose random maze for game, convert maze indexes to rooms
-    mazes = [maze_1, maze_2, maze_3, maze_4]
-    maze_choice = random.choice(range(0, 3))
+    mazes = [maze_1, maze_2, maze_3]  # random maze not used at this time
+    maze_choice = random.choice(range(0, len(mazes)))
     maze_layout = mazes[maze_choice]
     maze_layout = index_to_rooms(maze_layout, rooms)
 
@@ -97,6 +98,47 @@ def initialize():
     return maze_choice, maze_layout, player
 
 
+def vizualize_maze(maze_to_draw):
+    """
+    Uses Box Drawing unicode (u2500 - u257F) to draw the maze_to_draw
+    :param maze_to_draw: Maze to be visualized
+    :return: UI printout of maze_to_draw
+    """
+
+    # Create dictionary for box drawing unicode lookup
+    # NOTE: each character uses a space before the symbol
+    encoding = {0: ' \u2573',  # Closed room
+                1: ' \u253C',  # Open room
+                2: ' \u2502',  # NS corridor
+                3: ' \u2500',  # EW corridor
+                4: ' \u2518',  # NW corner
+                5: ' \u2514',  # NE corner
+                6: ' \u250C',  # SE corner
+                7: ' \u2510',  # SW corner
+                8: ' \u2534',  # EW with N tee
+                9: ' \u251C',  # NS with E tee
+                10: ' \u252C',  # EW with S tee
+                11: ' \u2524',  # NS with W tee
+                12: ' \u257D',  # N dead end
+                13: ' \u257E',  # E dead end
+                14: ' \u257F',  # S dead end
+                15: ' \u257C',  # W dead end
+                }
+
+    # Determine shape of maze_to_draw
+    x_len = len(maze_to_draw[0])
+    y_len = len(maze_to_draw)
+
+    draw = ['' for x in range(y_len)]
+    # Encode maze_to_draw
+    for i in range(0, x_len):  # columns
+        for j in range(0, y_len):  # rows
+            draw[j] += encoding[maze_to_draw[j][i]]
+
+    for row in draw:
+        print(row)
+
+
 def random_maze(size):
     """
     Creates a random square maze of dimension = size
@@ -112,7 +154,7 @@ def random_maze(size):
     new_maze[:, 0] = np.zeros(size)
     new_maze[:, -1] = np.zeros(size)
 
-    # Define possible indexes for each compass direction
+    # Define possible indexes for each compass direction (all options)
     north = [1, 2, 4, 5, 8, 9, 11, 12]
     east = [1, 3, 5, 6, 8, 9, 10, 13]
     south = [1, 2, 6, 7, 9, 10, 11, 14]
@@ -199,13 +241,13 @@ def random_maze(size):
 
             if i == 1 and j == 1:
                 new_maze[1][1] = 13  # enforce starting position
-                new_maze[i][j + 1] = random.choice(options)
+                new_maze[i][j + 1] = random.choice(list(set(options) - {15}))  # make sure dead end not beside start
             else:
                 new_maze[i][j + 1] = random.choice(options)
 
     # Extract actual maze
     new_maze = new_maze[1:-1, 1:-1]
-    return new_maze
+    return np.ndarray.tolist(new_maze.astype(int))
 
 
 def index_to_rooms(maze_x, rooms):
