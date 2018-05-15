@@ -13,6 +13,7 @@ import numpy as np
 
 import maze
 
+# todo: need a way to visualize mazes other than transcribing by hand...
 
 def print_header():
     print('=============================================')
@@ -102,7 +103,7 @@ def random_maze(size):
     :param size: Square dimension of desired maze
     :return: A list describing a random maze using index format
     """
-    # todo: try with only corridor and corner rooms
+
     # Pad maze with 0 with zero index perimeter
     size += 2
     new_maze = np.empty((size, size))
@@ -165,6 +166,7 @@ def random_maze(size):
                             options = list(set(south) - set(north) - set(west) - set(east))
 
             else:  # Bottom edge of maze... can never go south
+
                 if j < size - 3:  # for all columns before rightmost of actual maze
 
                     if left_door:
@@ -193,7 +195,7 @@ def random_maze(size):
                             options = list(set(north) - set(west) - set(south) - set(east))
 
                         else:
-                            options = list(set(north) - set(east) - set(south) - set(west))
+                            options = [0]
 
             if i == 1 and j == 1:
                 new_maze[1][1] = 13  # enforce starting position
