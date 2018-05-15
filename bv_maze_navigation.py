@@ -8,6 +8,7 @@ Third maze is the smallest and has no loops
 There are no enemies in the maze! Simply navigate your way through to find the exit
 """
 import random
+import numpy as np
 
 import maze
 
@@ -72,6 +73,8 @@ def initialize():
               [5, 4, 5, 3, 3, 8, 4],
               ]
 
+    maze_4 = random_maze(rooms, 10)
+
     # create list of mazes, choose random maze for game, convert maze indexes to rooms
     mazes = [maze_1, maze_2, maze_3]
     maze_choice = random.choice(range(0, 3))
@@ -92,7 +95,126 @@ def initialize():
     return maze_choice, maze_layout, player
 
 
+def random_maze(rooms, size):
+    """
+    Creates a random square maze of dimension = size
+    :param rooms: List of possible rooms
+    :param size: Square dimension of desired maze
+    :return: A list describing a random maze using index format
+    """
+
+    # Pad maze with 0 with zero index perimeter
+    size += 2
+    new_maze = np.empty((size, size))
+    new_maze[0, :] = np.zeros((1, size))
+    new_maze[-1, :] = np.zeros((1, size))
+    new_maze[:, 0] = np.zeros(size)
+    new_maze[:, -1] = np.zeros(size)
+
+    # Define possible indexes for each compass direction
+    north = [1, 2, 4, 5, 8, 9, 11, 12]
+    east = [1, 3, 5, 6, 8, 9, 10, 13]
+    south = [1, 2, 6, 7, 9, 10, 11, 14]
+    west = [1, 3, 4, 7, 8, 10, 11, 15]
+
+    # Set starting position
+    new_maze[1][1] = 13
+
+    # Loop through by row ensuring room connections
+    i = 0
+    j = 0
+    for i in range(1, size - 1):
+
+        for j in range(0, size - 2):
+            # Determine if a connection is needed to adjacent rooms
+            left_door = 1 if new_maze[i][j] in east else 0
+            right_door = 1 if new_maze[i][j + 1] in west else 0
+            top_door = 1 if new_maze[i - 1][j + 1] in south else 0
+            bottom_door = 1 if new_maze[i + 1][j + 1] in north else 0
+
+            if i < size - 2:  # for all rows above bottom row of actual maze
+
+                if j < size - 3:  # for all columns before rightmost of actual maze
+
+                    # Choose room at random that will connect with adjacent rooms
+                    if left_door:
+                        if top_door:
+                            options = list(set(west) & set(north))
+
+                        else:
+                            options = list(set(west) - set(north))
+                    else:
+                        if top_door:
+                            options = list(set(north) - set(west))
+
+                        else:
+                            options = list((set(south) & set(east)) - set(north) - set(west))
+
+                else:
+
+                    # Right edge of maze... can never go east
+                    if left_door:
+                        if top_door:
+                            options = list((set(west) & set(north)) - set(east))
+
+                        else:
+                            options = list((set(west) - set(north)) - set(east))
+                    else:
+                        if top_door:
+                            options = list(set(north) - set(west) - set(east))
+
+                        else:
+                            options = list(set(south) - set(north) - set(west) - set(east))
+
+            else:  # Bottom edge of maze... can never go south
+                if j < size - 3:  # for all columns before rightmost of actual maze
+
+                    if left_door:
+                        if top_door:
+                            options = list((set(west) & set(north)) - set(south))
+
+                        else:
+                            options = list((set(west) - set(north)) - set(south))
+                    else:
+                        if top_door:
+                            options = list(set(north) - set(west) - set(south))
+
+                        else:
+                            options = list(set(east) - set(west) - set(north) - set(south))
+
+                else:
+                    # Bottom right corner... can only go west and north
+                    if left_door:
+                        if top_door:
+                            options = list((set(west) & set(north)) - set(south) - set(east))
+
+                        else:
+                            options = list((set(west) - set(north)) - set(south) - set(east))
+                    else:
+                        if top_door:
+                            options = list(set(north) - set(west) - set(south) - set(east))
+
+                        else:
+                            options = list(set(north) - set(east) - set(south) - set(west))
+
+            if i == 1 and j == 1:
+                new_maze[1][1] = 13  # enforce starting position
+                new_maze[i][j + 1] = random.choice(options)
+            else:
+                new_maze[i][j + 1] = random.choice(options)
+
+    # Extract actual maze
+    new_maze = new_maze[1:-1, 1:-1]
+    return new_maze
+
+
 def index_to_rooms(maze_x, rooms):
+    """
+    This function replaces maze lists of indexes with room objects
+    :param maze_x: Maze to be recast into rooms
+    :param rooms: List of possible rooms
+    :return: List describing maze layout with room objects
+    """
     i = 0
     for x in maze_x:
         j = 0
