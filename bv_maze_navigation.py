@@ -279,6 +279,9 @@ def game_loop(maze_choice, maze_layout, player):
     :param player: Player object with inputted name
     :return: UI output
     """
+    # Set end of maze conditions
+    x_finish = 6 if maze_choice == 0 else 7 if maze_choice == 1 else 0 if maze_choice == 2 else 99
+    y_finish = 6 if maze_choice == 0 else 0 if maze_choice == 1 else 1 if maze_choice == 2 else 99
 
     while True:
 
@@ -310,10 +313,7 @@ def game_loop(maze_choice, maze_layout, player):
         else:
             print(f"I'm sorry, {cmd} was not recognized. Please re-enter a command.\n")
 
-        # Set and check end of maze condition
-        x_finish = 6 if maze_choice == 0 else 7 if maze_choice == 1 else 0
-        y_finish = 6 if maze_choice == 0 else 0 if maze_choice == 1 else 1
-
+        # Check end of maze condition
         if player.x_location == x_finish and player.y_location == y_finish:
             print(f'{player.name} has made it to the end of the maze! Congratulations!!')
             print("'Thanks for playing!")
