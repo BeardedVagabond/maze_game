@@ -16,8 +16,10 @@ The game consists of easy to read console output and prompts that guide the user
 		- i.e. a room with each combination of compas direction doors
 	c. Mazes are created as a list with numerical indexes for room types
 		- mazes were hand drawn and transcribed to room indexes
-	d. Next, one of three mazes are chosen at random for the game instance
-	e. Finally, a nested for loop converts the chosen map from indexes to room objects
+	d. A maze is randomly generated and visualized for inspection (not used in game yet)
+		- maze is created with no impossible rooms, however, quality not ensured and therefore not playable
+	e. Next, one of three mazes are chosen at random for the game instance
+	f. Finally, a nested for loop converts the chosen map from indexes to room objects
 
 2. Player instantiation
 	a. Name input is verified to be a string before continuing, however, any string input will be accepted
